@@ -29,6 +29,7 @@ public class GestorTasques {
         novaTasca.setDataInici(dataInici);
         novaTasca.setDataFiPrevista(dataFiPrevista);
         novaTasca.setPrioritat(prioritat);
+        llista.add(novaTasca);
         boolean notificat = notificador.notificar("Nova tasca creada: " + descripcio);
         if (!notificat)
             throw new Exception("No s'ha pogut notificar la creació de la tasca");
@@ -72,7 +73,9 @@ public class GestorTasques {
         if(dataInici != null && dataFiPrevista != null && dataInici.isAfter(dataFiPrevista)) {
             throw new Exception("La data d'inici no pot ser posterior a la data fi prevista.");
         }
-
+        if(dataInici != null && dataInici.isBefore(LocalDate.now())) {
+            throw new Exception("La data d'inici no pot ser anterior a la data actual.");
+        }
 
         if (prioritat != null && (prioritat < 1 || prioritat > 5)) {
             throw new Exception("La prioritat ha de ser un valor entre 1 i 5");
@@ -89,6 +92,8 @@ public class GestorTasques {
                 tasca.setCompletada(completada == null ? false : completada);
                 tasca.setDescripcio(novaDescripcio);
                 tasca.setPrioritat(prioritat);
+                tasca.setDataInici(dataInici);
+                tasca.setDataFiPrevista(dataFiPrevista);
                 tascaModificada = tasca;
                 break;
             }
